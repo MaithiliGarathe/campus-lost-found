@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Campus Lost & Found</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h1 class="mb-4">Campus Lost & Found Board</h1>
+    <a href="/post" class="btn btn-primary mb-3">+ Post an Item</a>
+    <input type="text" id="searchBox" class="form-control mb-4" placeholder="Search items...">
+
+    <div class="row" id="itemBoard">
+        {% for item in items %}
+        <div class="col-md-4 mb-3 item-card" data-name="{{ item.name|lower }}" data-category="{{ item.category|lower }}">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.name }}</h5>
+                    <p class="card-text">{{ item.description }}</p>
+                    <p><strong>Category:</strong> {{ item.category }}</p>
+                    <p><strong>Location:</strong> {{ item.location }}</p>
+                    <p><strong>Status:</strong> {{ item.status }}</p>
+                    <p><strong>Contact:</strong> {{ item.contact_info }}</p>
+                    {% if item.status != 'Claimed' %}
+                    <a href="/update/{{ item.id }}" class="btn btn-success btn-sm">Mark as Claimed</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+document.getElementById('searchBox').addEventListener('input', function() {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll('.item-card').forEach(card => {
+        const name = card.getAttribute('data-name');
+        const category = card.getAttribute('data-category');
+        card.style.display = (name.includes(query) || category.includes(query)) ? '' : 'none';
+    });
+});
+</script>
+</body>
+</html>
